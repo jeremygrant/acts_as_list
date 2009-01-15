@@ -119,14 +119,6 @@ module ActiveRecord
           end
         end
 
-        # Removes the item from the list.
-        def remove_from_list
-          if in_list?
-            decrement_positions_on_lower_items
-            update_attribute position_column, nil
-          end
-        end
-
         # Increase the position of this item without adjusting the rest of the list.
         def increment_position
           return unless in_list?
@@ -173,6 +165,14 @@ module ActiveRecord
         end
 
         private
+          # Removes the item from the list.
+          def remove_from_list
+            if in_list?
+              decrement_positions_on_lower_items
+              update_attribute position_column, bottom_position_in_list
+            end
+          end
+
           def add_to_list_top
             increment_positions_on_all_items
           end
